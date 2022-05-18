@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    maven { url 'https://repo.spring.io/libs-snapshot' }
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
+    // implement BOM
+    implementation platform('io.projectreactor:reactor-bom:2022.0.0-M2')
+    implementation 'io.projectreactor:reactor-core'
+    // define dependencies
+    implementation 'io.projectreactor.netty:reactor-netty-core'
+    implementation 'io.projectreactor.netty:reactor-netty-http'
+}
+
+test {
+    useJUnitPlatform()
+}
