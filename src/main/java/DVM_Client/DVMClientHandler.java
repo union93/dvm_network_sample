@@ -1,29 +1,44 @@
 package DVM_Client;
-
-
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.CharsetUtil;
 
-import java.nio.charset.Charset;
+
 
 public class DVMClientHandler extends SimpleChannelInboundHandler {
-    ChannelHandlerContext ctx;
+    String msg2Send;
+    public DVMClientHandler(String msg){
+        this.msg2Send = msg;
+    }
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
 
     }
-    public void sendMsg (String msg){
-        if(ctx != null){
-            ChannelFuture channelFuture = ctx.write(Unpooled.copiedBuffer(msg, CharsetUtil.UTF_8));
-            ctx.flush();
-            if(!channelFuture.isSuccess()){
-                System.out.println("Send failed" + channelFuture.cause());
-            }
-        }else{
-            System.out.println("채널 초기화 실패");
-        }
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("channel Registered");
+    }
+
+    @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("channel UnRegistered");
+    }
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("channel Active");
+        sendMsg(ctx,msg2Send);
+        ctx.close();
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
+    }
+    public void channelClose(ChannelHandlerContext ctx){
+        ctx.close();
+    }
+
+    public void sendMsg (ChannelHandlerContext ctx, String msg){
+        ctx.writeAndFlush(msg);
+        System.out.println("sendMessage");
     }
 }

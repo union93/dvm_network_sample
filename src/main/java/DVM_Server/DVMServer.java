@@ -8,40 +8,29 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 
 public class DVMServer {
 
     private static final int PORT = 8080;
+
+    public ArrayList<Message> msgList = new ArrayList<Message>();
     public void run() throws Exception{
 
         EventLoopGroup parentGroup = new NioEventLoopGroup();
-        EventLoopGroup childGrup = new NioEventLoopGroup();
+        EventLoopGroup childGroup = new NioEventLoopGroup();
 
         try {
             ServerBootstrap bs = new ServerBootstrap();
-            bs.group(parentGroup,childGrup)
+            bs.group(parentGroup,childGroup)
                     .channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(PORT))
                     .childHandler(new DVMServerInitializer());
             ChannelFuture future = bs.bind().sync();
-            future.addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture future) throws Exception {
-                    if(future.isSuccess()){
-                        System.out.println("Server bound");
-                    }else{
-                        System.out.println("Server bound");
-                        future.cause().printStackTrace();
-                    }
-                }
-            });
             future.channel().closeFuture().sync();
         }finally {
             parentGroup.shutdownGracefully();
-            childGrup.shutdownGracefully();
+            childGroup.shutdownGracefully();
         }
-    }
-    public void writeMessage(String msg){
-
     }
 }
