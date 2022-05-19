@@ -14,6 +14,14 @@ public class DVMServer {
 
     private static final int PORT = 8080;
 
+    public DVMServer(ArrayList<Message> msgList){
+        this.msgList = msgList;
+    }
+
+    public ArrayList<Message> getMsgList() {
+        return msgList;
+    }
+
     public ArrayList<Message> msgList = new ArrayList<Message>();
     public void run() throws Exception{
 
@@ -25,7 +33,7 @@ public class DVMServer {
             bs.group(parentGroup,childGroup)
                     .channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(PORT))
-                    .childHandler(new DVMServerInitializer());
+                    .childHandler(new DVMServerInitializer(msgList));
             ChannelFuture future = bs.bind().sync();
             future.channel().closeFuture().sync();
         }finally {

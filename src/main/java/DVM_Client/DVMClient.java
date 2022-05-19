@@ -1,5 +1,6 @@
 package DVM_Client;
 import DVM_Server.DVMServerInitializer;
+import Model.Message;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
