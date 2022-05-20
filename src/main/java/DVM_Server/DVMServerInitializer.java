@@ -14,15 +14,9 @@ import io.netty.util.CharsetUtil;
 import java.util.ArrayList;
 
 public class DVMServerInitializer extends ChannelInitializer<SocketChannel>{
-
-    public ArrayList<Message> msgList;
-    DVMServerInitializer(ArrayList<Message> msgList){
-        this.msgList = msgList;
-
-    }
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
-        ch.pipeline().addLast(new DVMServerHandler(msgList));
+        ch.pipeline().addLast(new DVMServerHandler());
     }
 }
 

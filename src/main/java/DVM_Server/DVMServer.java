@@ -13,16 +13,7 @@ import java.util.ArrayList;
 public class DVMServer {
 
     private static final int PORT = 8080;
-
-    public DVMServer(ArrayList<Message> msgList){
-        this.msgList = msgList;
-    }
-
-    public ArrayList<Message> getMsgList() {
-        return msgList;
-    }
-
-    public ArrayList<Message> msgList = new ArrayList<Message>();
+    public static ArrayList<Message> msgList = new ArrayList<>();
     public void run() throws Exception{
 
         EventLoopGroup parentGroup = new NioEventLoopGroup();
@@ -33,7 +24,7 @@ public class DVMServer {
             bs.group(parentGroup,childGroup)
                     .channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(PORT))
-                    .childHandler(new DVMServerInitializer(msgList));
+                    .childHandler(new DVMServerInitializer());
             ChannelFuture future = bs.bind().sync();
             future.channel().closeFuture().sync();
         }finally {
