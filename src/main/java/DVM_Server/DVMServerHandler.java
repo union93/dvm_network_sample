@@ -5,31 +5,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.CharsetUtil;
+import javafx.application.Platform;
 
 import static DVM_Server.DVMServer.msgList;
+import static DVM_Server.DVMServer.observableList;
 
 
 public class DVMServerHandler extends SimpleChannelInboundHandler{
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("Channel is activated");
-    }
-
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("Channel is inactivated");
-    }
-
-    @Override
-    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("Channel Unregistered");
-    }
-
-    @Override
-    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("Channel Registered");
-    }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
@@ -41,7 +23,12 @@ public class DVMServerHandler extends SimpleChannelInboundHandler{
         String data = in.toString(CharsetUtil.UTF_8);
         Deserializer converter = new Deserializer();
         msgList.add(converter.json2Message(data));
-        System.out.println(msgList);
+        observableList.add(converter.json2Message(data));
+    }
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.toString();
+        ctx.close();
     }
 }
 

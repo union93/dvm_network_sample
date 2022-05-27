@@ -14,7 +14,7 @@ public class DVMClient {
         this.IP = host;
         this.msg = msg;
     }
-    public void run() throws InterruptedException {
+    public void run()  {
         EventLoopGroup group = new NioEventLoopGroup();
         try{
             Bootstrap clientBs = new Bootstrap();
@@ -25,6 +25,9 @@ public class DVMClient {
                 .handler( new DVMClientInitializer(msg));
             ChannelFuture channelFuture = clientBs.connect().sync();
             channelFuture.channel().closeFuture().sync();
+        }
+        catch(InterruptedException e){
+            e.toString();
         }
         finally {
             group.shutdownGracefully();

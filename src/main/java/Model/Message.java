@@ -1,6 +1,8 @@
 package Model;
 
-public class Message {
+import javafx.collections.ObservableArray;
+
+public class Message  {
     public String getSrcId() {
         return srcId;
     }
